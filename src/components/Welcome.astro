@@ -5,10 +5,12 @@ const githubUrl = 'https://github.com/michaelmoses-op/';
 const linkedinUrl = 'https://www.linkedin.com/in/michael-moses-8294081b3';
 ---
 <div class="hero">
-	<div class="hero-brand">
-		<BrandLogo animated />
+	<div class="hero-header">
+		<h1>Michael Moses</h1>
+		<div class="hero-brand">
+			<BrandLogo animated />
+		</div>
 	</div>
-	<h1>Michael Moses</h1>
 	<p class="role">Software engineer focused on backend services, internal tools, and full-stack product work.</p>
 	<div class="links">
 		<a href={githubUrl} target="_blank" rel="noopener noreferrer">GitHub</a>
@@ -52,19 +54,46 @@ const linkedinUrl = 'https://www.linkedin.com/in/michael-moses-8294081b3';
 		border-radius: 0 0 6px 0;
 	}
 
+	.hero-header {
+		display: flex;
+		align-items: flex-start;
+		justify-content: space-between;
+		gap: 1rem;
+		margin-bottom: 10px;
+	}
+
 	.hero-brand {
-		position: absolute;
-		top: 3.25rem;
-		right: 2.25rem;
-		margin: 0;
+		flex-shrink: 0;
+		margin: 0.15rem 0 0;
 	}
 
 	h1 {
 		font-size: 29px;
 		font-weight: 600;
 		color: var(--ink);
-		margin: 0 0 10px;
+		margin: 0;
 		letter-spacing: 0.01em;
+		min-width: 0;
+	}
+
+	@media (max-width: 520px) {
+		.hero {
+			padding: 28px 22px;
+		}
+
+		.hero-header {
+			flex-direction: column-reverse;
+			align-items: flex-start;
+			gap: 0.75rem;
+		}
+
+		.hero-brand {
+			margin: 0;
+		}
+
+		h1 {
+			font-size: 24px;
+		}
 	}
 
 	.role {
