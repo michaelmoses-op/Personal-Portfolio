@@ -3,8 +3,21 @@ layout: ../../layouts/ProjectLayout.astro
 title: 'Steel City Bus Tracker'
 icon: '/projects/steel-city-bus-tracker/icon.png'
 description: 'A web app for Pittsburgh Regional Transit—static routes and stops, live bus positions, service alerts, and trip planning over open GTFS data.'
+image:
+    url: '/projects/steel-city-bus-tracker/home.png'
+    alt: 'Steel City Bus Tracker home with live route counts and quick links'
+gallery:
+    - url: '/projects/steel-city-bus-tracker/map.jpg'
+      alt: 'Live map with bus positions streaming over SSE'
+    - url: '/projects/steel-city-bus-tracker/routes.jpg'
+      alt: 'Routes list with map preview and live status'
+    - url: '/projects/steel-city-bus-tracker/stops.png'
+      alt: 'Nearby stops with distance and location lookup'
+    - url: '/projects/steel-city-bus-tracker/alerts.png'
+      alt: 'PRT service alerts from GTFS-Realtime'
 tags: ["Next.js", "Hono", "PostgreSQL", "Redis", "TanStack Query", "TypeScript"]
 github: 'https://github.com/michaelmoses-op/Steel-City-Bus-Line'
+demo: 'https://steel-city-bus-line-xi.vercel.app/'
 ---
 
 I built this because the official tools are often wrong on route details, lag on live tracking, or are hard to use on a map. The app keeps PRT feeds on the server and focuses on presentation—clear maps, stop boards, and alerts—without asking the browser to talk to PRT directly.

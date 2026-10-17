@@ -8,7 +8,15 @@ const tagKeys = tags.map((tag: string) => normalizeTechTagKey(tag)).filter(Boole
 <li class="project" data-tags={tagKeys}>
   <a class="project-link" href={url} aria-label={`View project ${title}`}>
     {image?.url ? (
-      <img class="thumb" src={image.url} alt={image.alt ?? ''} />
+      <img
+        class="thumb"
+        src={image.url}
+        alt={image.alt ?? ''}
+        width="320"
+        height="200"
+        loading="lazy"
+        decoding="async"
+      />
     ) : (
       <div class="thumb" aria-hidden="true"></div>
     )}
@@ -34,9 +42,10 @@ const tagKeys = tags.map((tag: string) => normalizeTechTagKey(tag)).filter(Boole
 
   .project-link {
     display: grid;
-    grid-template-columns: 120px 1fr;
-    gap: 22px;
+    grid-template-columns: min(42%, 320px) 1fr;
+    gap: 24px;
     padding: 22px;
+    align-items: start;
     border: 1px solid var(--line);
     border-radius: 8px;
     background: rgba(255, 255, 255, 0.012);
@@ -52,12 +61,18 @@ const tagKeys = tags.map((tag: string) => normalizeTechTagKey(tag)).filter(Boole
   }
 
   .thumb {
-    width: 120px;
-    height: 88px;
-    border-radius: 5px;
-    object-fit: cover;
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    height: auto;
+    border-radius: 6px;
+    object-fit: contain;
     display: block;
     border: 1px solid var(--line);
+    background: var(--panel);
+  }
+
+  .thumb:not([src]),
+  .thumb[src=''] {
     background: linear-gradient(155deg, #2b3a3f, #182225 70%);
   }
 
@@ -100,8 +115,7 @@ const tagKeys = tags.map((tag: string) => normalizeTechTagKey(tag)).filter(Boole
     }
 
     .thumb {
-      width: 100%;
-      height: 120px;
+      max-height: min(52vw, 220px);
     }
   }
 </style>
