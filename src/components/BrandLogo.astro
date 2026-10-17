@@ -1,0 +1,22 @@
+---
+interface Props {
+  /** Draw-in + blinking cursor (home hero). */
+  animated?: boolean;
+  class?: string;
+}
+
+const { animated = false, class: className = '' } = Astro.props;
+---
+<svg
+  class:list={['brand-logo', className, animated && 'brand-logo--animated']}
+  viewBox="7 15 50 42"
+  fill="none"
+  role="img"
+  aria-label="MM logo"
+>
+  <g stroke="var(--accent)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
+    <path class="m m1" pathLength="1" d="M11 41 V20 L20 32 L29 20 V41" />
+    <path class="m m2" pathLength="1" d="M35 41 V20 L44 32 L53 20 V41" />
+  </g>
+  <rect class="cursor" x="11" y="48" width="14" height="5" rx="2.5" fill="var(--accent)" opacity="0.85" />
+</svg>

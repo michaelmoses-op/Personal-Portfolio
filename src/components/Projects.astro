@@ -1,0 +1,111 @@
+---
+import ProjectPage from '../components/ProjectPage.astro';
+import ProjectTagFilters from '../components/ProjectTagFilters.astro';
+import { collectProjectTags } from '../utils/techTags';
+
+const allPosts = Object.values(import.meta.glob('/src/pages/projects/*.md', { eager: true }));
+const filterTags = collectProjectTags(allPosts as { frontmatter: { tags?: string[] } }[]);
+---
+<div class="projects" id="projectSection">
+    {filterTags.length > 0 && <ProjectTagFilters tags={filterTags} />}
+
+    <p class="section-label">
+        <span>PROJECTS</span>
+        <span class="count" id="project-count"></span>
+    </p>
+
+    <ul id="projects-list">
+        {allPosts.map((post: any) => (
+          <ProjectPage
+            url={post.url}
+            title={post.frontmatter.title}
+            description={post.frontmatter.description}
+            image={post.frontmatter.image}
+            tags={post.frontmatter.tags ?? []}
+          />
+        ))}
+    </ul>
+
+    <p class="empty-state" id="projects-empty">
+        Nothing tagged with that yet — try another filter.
+    </p>
+</div>
+
+<script is:inline>
+  (function () {
+    var STORAGE_KEY = 'projectFilterTag';
+    var OVERFLOW_CLASS = 'tag--overflow';
+
+    function getSavedFilter() {
+      var fromUrl = new URLSearchParams(window.location.search).get('tag');
+      if (fromUrl) return fromUrl;
+      try {
+        return sessionStorage.getItem(STORAGE_KEY) || 'all';
+      } catch (_) {
+        return 'all';
+      }
+    }
+
+    function applyFilterSync(tag) {
+      var filterRoot = document.getElementById('project-filters');
+      var projects = document.querySelectorAll('#projects-list .project');
+      var emptyState = document.getElementById('projects-empty');
+      var countEl = document.getElementById('project-count');
+      var visible = 0;
+
+      projects.forEach(function (project) {
+        var tags = (project.getAttribute('data-tags') || '').split(',');
+        var match = tag === 'all' || tags.indexOf(tag) !== -1;
+        project.classList.toggle('hidden', !match);
+        if (match) visible += 1;
+      });
+
+      if (emptyState) {
+        emptyState.classList.toggle('visible', visible === 0);
+      }
+
+      if (countEl) {
+        countEl.textContent = tag === 'all' ? '' : visible + ' / ' + projects.length;
+      }
+
+      if (filterRoot) {
+        var activeBtn = null;
+        var tagButtons = filterRoot.querySelectorAll('.tag[data-tag]');
+        tagButtons.forEach(function (btn) {
+          if (btn.dataset.tag === tag) activeBtn = btn;
+          btn.classList.remove('active');
+        });
+
+        if (!activeBtn) {
+          tag = 'all';
+          tagButtons.forEach(function (btn) {
+            if (btn.dataset.tag === 'all') activeBtn = btn;
+          });
+        }
+
+        if (activeBtn && activeBtn.classList.contains(OVERFLOW_CLASS) && activeBtn.hidden) {
+          filterRoot.querySelectorAll('.' + OVERFLOW_CLASS).forEach(function (btn) {
+            btn.hidden = false;
+          });
+          var moreToggle = document.getElementById('filters-more-toggle');
+          if (moreToggle) {
+            moreToggle.setAttribute('aria-expanded', 'true');
+            moreToggle.textContent = 'Less';
+          }
+        }
+
+        if (activeBtn) activeBtn.classList.add('active');
+      }
+
+      var section = document.getElementById('projectSection');
+      if (section) section.setAttribute('data-filter-initialized', tag);
+      document.documentElement.classList.remove('project-filter-pending');
+    }
+
+    applyFilterSync(getSavedFilter());
+  })();
+</script>
+
+<script>
+  import "../scripts/projectFilters.js";
+</script>

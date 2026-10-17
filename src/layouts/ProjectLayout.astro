@@ -1,0 +1,89 @@
+---
+import '../styles/global.css';
+import ProjectGallery from '../components/ProjectGallery.astro';
+import ProjectPageHeader from '../components/ProjectPageHeader.astro';
+import type { ProjectGalleryItem } from '../components/ProjectGallery.astro';
+import { normalizeGalleryItem } from '../utils/galleryItems';
+
+const { frontmatter } = Astro.props;
+const gallery = frontmatter.gallery ?? [];
+const tags = frontmatter.tags ?? [];
+
+const galleryItems: ProjectGalleryItem[] = [];
+if (frontmatter.image?.url) {
+  galleryItems.push(
+    normalizeGalleryItem({
+      url: frontmatter.image.url,
+      alt: frontmatter.image.alt ?? frontmatter.title,
+      type: frontmatter.image.type,
+      poster: frontmatter.image.poster,
+    }),
+  );
+}
+for (const item of gallery) {
+  galleryItems.push(
+    normalizeGalleryItem({
+      url: item.url,
+      alt: item.alt ?? '',
+      type: item.type,
+      poster: item.poster,
+    }),
+  );
+}
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width" />
+    <title>{frontmatter.title} — Michael Moses</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" />
+  </head>
+  <body class="project-page">
+    <div class="wrap">
+      <ProjectPageHeader />
+      <article class="project-writeup">
+        <div class="project-writeup-title-row">
+          {frontmatter.icon && (
+            <img
+              class="project-writeup-icon"
+              src={frontmatter.icon}
+              alt=""
+              width="40"
+              height="40"
+              decoding="async"
+            />
+          )}
+          <h1 class="project-writeup-title">{frontmatter.title}</h1>
+        </div>
+        {frontmatter.description && (
+          <p class="project-writeup-desc">{frontmatter.description}</p>
+        )}
+
+        {(frontmatter.github || frontmatter.demo) && (
+          <p class="project-writeup-links">
+            {frontmatter.github && (
+              <a href={frontmatter.github} target="_blank" rel="noopener noreferrer">GitHub</a>
+            )}
+            {frontmatter.demo && (
+              <a href={frontmatter.demo} target="_blank" rel="noopener noreferrer">Live demo</a>
+            )}
+          </p>
+        )}
+
+        {tags.length > 0 && (
+          <p class="project-writeup-stack">{tags.join(' · ')}</p>
+        )}
+
+        <ProjectGallery items={galleryItems} />
+
+        <div class="project-writeup-body">
+          <slot />
+        </div>
+      </article>
+    </div>
+  </body>
+</html>

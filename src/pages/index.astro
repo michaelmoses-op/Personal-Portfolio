@@ -1,0 +1,48 @@
+---
+import '../styles/global.css';
+import Projects from '../components/Projects.astro';
+import Welcome from '../components/Welcome.astro';
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width" />
+		<link rel="icon" href="/favicon.ico" sizes="any" />
+		<link rel="icon" type="image/png" href="/favicon.png" />
+		<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+		<title>Michael Moses — Software Engineer</title>
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" />
+		<script is:inline>
+			(function () {
+				var tag = new URLSearchParams(window.location.search).get('tag');
+				if (!tag) {
+					try {
+						tag = sessionStorage.getItem('projectFilterTag');
+					} catch (_) {}
+				}
+				if (tag && tag !== 'all') {
+					document.documentElement.classList.add('project-filter-pending');
+				}
+			})();
+		</script>
+	</head>
+	<body>
+		<div class="wrap">
+			<Welcome />
+			<Projects />
+			<footer>Based in Pennsylvania</footer>
+		</div>
+	</body>
+</html>
+
+<style>
+	footer {
+		margin-top: 56px;
+		font-size: 12px;
+		color: var(--muted);
+		padding-left: 2px;
+	}
+</style>
+

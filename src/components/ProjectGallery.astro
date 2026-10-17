@@ -1,0 +1,131 @@
+---
+import { isGalleryVideo } from '../utils/galleryItems';
+
+export type ProjectGalleryItem = {
+  url: string;
+  alt: string;
+  type?: 'image' | 'video';
+  poster?: string;
+};
+
+/** @deprecated use ProjectGalleryItem */
+export type ProjectGalleryImage = ProjectGalleryItem;
+
+interface Props {
+  items: ProjectGalleryItem[];
+}
+
+const { items } = Astro.props;
+if (items.length === 0) return null;
+
+const itemsJson = JSON.stringify(items);
+const first = items[0];
+const isFirstVideo = isGalleryVideo(first);
+---
+<section
+  class="project-gallery"
+  id="project-gallery"
+  aria-label="Project media"
+>
+  <script type="application/json" id="project-gallery-data" set:html={itemsJson} />
+  <button
+    type="button"
+    class="project-gallery-feature"
+    data-gallery-open="0"
+    data-gallery-feature
+    aria-label={isFirstVideo ? 'Open video in viewer' : 'Open screenshot in viewer'}
+  >
+    <img
+      id="project-gallery-feature-img"
+      src={isFirstVideo ? first.poster ?? '' : first.url}
+      alt={isFirstVideo ? '' : first.alt}
+      width="1200"
+      height="675"
+      hidden={isFirstVideo}
+    />
+    {isFirstVideo ? (
+      <video
+        id="project-gallery-feature-video"
+        src={first.url}
+        poster={first.poster}
+        controls
+        playsinline
+        preload="metadata"
+      />
+    ) : (
+      <video id="project-gallery-feature-video" controls playsinline preload="none" hidden />
+    )}
+  </button>
+
+  {items.length > 1 && (
+    <div class="project-gallery-thumbs" role="tablist" aria-label="Media thumbnails">
+      {items.map((item, index) => {
+        const isVideo = isGalleryVideo(item);
+        const thumbSrc = isVideo ? item.poster ?? item.url : item.url;
+        return (
+          <button
+            type="button"
+            class:list={[
+              'project-gallery-thumb',
+              isVideo && 'project-gallery-thumb--video',
+              index === 0 && 'is-active',
+            ]}
+            data-gallery-index={index}
+            role="tab"
+            aria-selected={index === 0 ? 'true' : 'false'}
+            aria-label={item.alt || (isVideo ? `Video ${index + 1}` : `Screenshot ${index + 1}`)}
+          >
+            {isVideo && !item.poster ? (
+              <span class="project-gallery-thumb-video-label">Video</span>
+            ) : (
+              <img src={thumbSrc} alt="" loading="lazy" />
+            )}
+            {isVideo && <span class="project-gallery-thumb-play" aria-hidden="true">▶</span>}
+          </button>
+        );
+      })}
+    </div>
+  )}
+</section>
+
+<div
+  id="project-lightbox"
+  class="project-lightbox"
+  hidden
+  aria-hidden="true"
+  role="dialog"
+  aria-modal="true"
+  aria-label="Media viewer"
+>
+  <div class="project-lightbox-backdrop" data-lightbox-close></div>
+  <div class="project-lightbox-panel">
+    <button type="button" class="project-lightbox-close" data-lightbox-close aria-label="Close">
+      ✕
+    </button>
+    <div class="project-lightbox-stage">
+      <button type="button" class="project-lightbox-nav project-lightbox-prev" data-lightbox-prev aria-label="Previous">
+        ←
+      </button>
+      <figure class="project-lightbox-figure">
+        <img id="project-lightbox-img" src="" alt="" hidden />
+        <video
+          id="project-lightbox-video"
+          src=""
+          controls
+          playsinline
+          preload="metadata"
+          hidden
+        />
+        <figcaption id="project-lightbox-caption"></figcaption>
+      </figure>
+      <button type="button" class="project-lightbox-nav project-lightbox-next" data-lightbox-next aria-label="Next">
+        →
+      </button>
+    </div>
+    <p class="project-lightbox-counter" id="project-lightbox-counter"></p>
+  </div>
+</div>
+
+<script>
+  import '../scripts/projectGallery.js';
+</script>

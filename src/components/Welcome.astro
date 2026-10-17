@@ -1,0 +1,93 @@
+---
+import BrandLogo from './BrandLogo.astro';
+
+const githubUrl = 'https://github.com/michaelmoses-op/';
+const linkedinUrl = 'https://www.linkedin.com/in/michael-moses-8294081b3';
+---
+<div class="hero">
+	<div class="hero-brand">
+		<BrandLogo animated />
+	</div>
+	<h1>Michael Moses</h1>
+	<p class="role">Software engineer focused on backend services, internal tools, and full-stack product work.</p>
+	<div class="links">
+		<a href={githubUrl} target="_blank" rel="noopener noreferrer">GitHub</a>
+		<a href={linkedinUrl} target="_blank" rel="noopener noreferrer">LinkedIn</a>
+	</div>
+</div>
+
+<style>
+	.hero {
+		position: relative;
+		padding: 44px 36px;
+		margin-bottom: 76px;
+		border: 1px solid var(--line);
+		border-radius: 10px;
+		background: linear-gradient(180deg, rgba(255, 255, 255, 0.015), transparent 40%);
+	}
+
+	.hero::before,
+	.hero::after {
+		content: "";
+		position: absolute;
+		width: 14px;
+		height: 14px;
+		border: 1px solid var(--accent-dim);
+		opacity: 0.7;
+	}
+
+	.hero::before {
+		top: -1px;
+		left: -1px;
+		border-right: none;
+		border-bottom: none;
+		border-radius: 6px 0 0 0;
+	}
+
+	.hero::after {
+		bottom: -1px;
+		right: -1px;
+		border-left: none;
+		border-top: none;
+		border-radius: 0 0 6px 0;
+	}
+
+	.hero-brand {
+		position: absolute;
+		top: 3.25rem;
+		right: 2.25rem;
+		margin: 0;
+	}
+
+	h1 {
+		font-size: 29px;
+		font-weight: 600;
+		color: var(--ink);
+		margin: 0 0 10px;
+		letter-spacing: 0.01em;
+	}
+
+	.role {
+		font-size: 14px;
+		color: var(--muted);
+		line-height: 1.75;
+		margin: 0 0 30px;
+		max-width: 52ch;
+	}
+
+	.links {
+		display: flex;
+		gap: 26px;
+		font-size: 13px;
+	}
+
+	.links a {
+		color: var(--accent);
+		text-decoration: none;
+		border-bottom: 1px solid transparent;
+	}
+
+	.links a:hover {
+		border-bottom: 1px solid var(--accent);
+	}
+</style>

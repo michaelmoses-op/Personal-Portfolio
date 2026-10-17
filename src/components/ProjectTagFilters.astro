@@ -1,0 +1,31 @@
+---
+import type { ProjectTag } from '../utils/techTags';
+
+interface Props {
+  tags: ProjectTag[];
+  /** Tags shown before the "More" toggle (reference UX: ~8–10). */
+  visibleLimit?: number;
+}
+
+const { tags, visibleLimit = 10 } = Astro.props;
+const primary = tags.slice(0, visibleLimit);
+const overflow = tags.slice(visibleLimit);
+---
+<div class="filters" id="project-filters" role="group" aria-label="Filter projects by technology">
+  <button type="button" class="tag" data-tag="all">All</button>
+  {primary.map((tag) => (
+    <button type="button" class="tag" data-tag={tag.key}>
+      {tag.label}
+    </button>
+  ))}
+  {overflow.map((tag) => (
+    <button type="button" class="tag tag--overflow" data-tag={tag.key} hidden>
+      {tag.label}
+    </button>
+  ))}
+  {overflow.length > 0 && (
+    <button type="button" class="tag tag-more-toggle" id="filters-more-toggle" aria-expanded="false">
+      More ({overflow.length})
+    </button>
+  )}
+</div>
