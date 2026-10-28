@@ -21,7 +21,7 @@ gallery:
       alt: 'Media Mashup marketing landing page with example matchup'
 tags: ["React", "TypeScript", "Vite", "TanStack Query", "FastAPI", "PostgreSQL"]
 github: 'https://github.com/michaelmoses-op/TopFrame'
-demo: 'https://dreamy-syrniki-b6b401.netlify.app/'
+demo: 'https://mediamashupapp.com/'
 ---
 
 Letterboxd and spreadsheets tell you what you watched, but they do not give you a living order you refine by choosing between two titles at a time. Media Mashup is for that: you keep a library of films you have seen, compare them in pairs, and each pick updates ELO on your account only. Rankings, history, and social views all read from the same comparison data. The app talks to TMDB for search and metadata; your rankings are not shared as one global score per film.
